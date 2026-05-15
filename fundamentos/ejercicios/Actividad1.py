@@ -31,11 +31,11 @@ class SistemaInventario:
             try:
                 valor = float(input(mensaje))
                 if valor < 0:
-                    print("  ✗ El valor no puede ser negativo.")
+                    print("  El valor no puede ser negativo.")
                 else:
                     return valor
             except ValueError:
-                print("  ✗ Ingresa un número válido (ej: 1500 o 3.99).")
+                print("   Ingresa un número válido (ej: 1500 o 3.99).")
 
     def _pedir_int_positivo(self, mensaje):
         """Solicita un entero >= 0, repite hasta obtener uno válido."""
@@ -43,18 +43,18 @@ class SistemaInventario:
             try:
                 valor = int(input(mensaje))
                 if valor < 0:
-                    print("  ✗ El valor no puede ser negativo.")
+                    print("   El valor no puede ser negativo.")
                 else:
                     return valor
             except ValueError:
-                print("  ✗ Ingresa un número entero válido (ej: 10).")
+                print("   Ingresa un número entero válido (ej: 10).")
 
     def _pedir_texto(self, mensaje):
         """Solicita texto no vacío, repite hasta obtener uno válido."""
         while True:
             valor = input(mensaje).strip()
             if valor == "":
-                print("  ✗ Este campo no puede estar vacío.")
+                print("   Este campo no puede estar vacío.")
             else:
                 return valor
 
@@ -73,7 +73,7 @@ class SistemaInventario:
         while True:
             codigo = self._pedir_texto("  Codigo: ")
             if self._buscar_por_codigo(codigo):
-                print("  ✗ Ese codigo ya existe, usa uno diferente.")
+                print("   Ese codigo ya existe, usa uno diferente.")
             else:
                 break
 
@@ -84,7 +84,7 @@ class SistemaInventario:
 
         nuevo = Producto(codigo, nombre, precio, cantidad, categoria)
         self.productos.append(nuevo)
-        print("  ✓ Producto registrado exitosamente.")
+        print("  Producto registrado exitosamente.")
 
     def mostrar_productos(self):
         print("\n  -- Lista de productos --")
@@ -107,7 +107,7 @@ class SistemaInventario:
                 print("  Producto encontrado:")
                 print(" ", prod.mostrar_info())
             else:
-                print("  ✗ Producto no encontrado.")
+                print("   Producto no encontrado.")
 
         elif criterio == "2":
             nombre_buscar = self._pedir_texto("  Nombre a buscar: ").lower()
@@ -117,9 +117,9 @@ class SistemaInventario:
                 for prod in encontrados:
                     print(" ", prod.mostrar_info())
             else:
-                print("  ✗ No se encontraron productos con ese nombre.")
+                print("   No se encontraron productos con ese nombre.")
         else:
-            print("  ✗ Opción inválida.")
+            print("   Opción inválida.")
 
     def actualizar_producto(self):
         print("\n  -- Actualizar producto --")
@@ -127,7 +127,7 @@ class SistemaInventario:
         prod = self._buscar_por_codigo(codigo)
 
         if prod is None:
-            print("  ✗ Producto no encontrado.")
+            print("   Producto no encontrado.")
             return
 
         print(f"  Producto actual: {prod.mostrar_info()}")
@@ -140,15 +140,15 @@ class SistemaInventario:
 
         if opcion == "1":
             prod.precio = self._pedir_float_positivo("  Nuevo precio: $")
-            print("  ✓ Precio actualizado.")
+            print("   Precio actualizado.")
         elif opcion == "2":
             prod.cantidad = self._pedir_int_positivo("  Nueva cantidad: ")
-            print("  ✓ Cantidad actualizada.")
+            print("   Cantidad actualizada.")
         elif opcion == "3":
             prod.categoria = self._pedir_texto("  Nueva categoria: ")
-            print("  ✓ Categoria actualizada.")
+            print("  Categoria actualizada.")
         else:
-            print("  ✗ Opción inválida.")
+            print("  Opción inválida.")
 
     def eliminar_producto(self):
         print("\n  -- Eliminar producto --")
@@ -156,13 +156,13 @@ class SistemaInventario:
         prod = self._buscar_por_codigo(codigo)
 
         if prod is None:
-            print("  ✗ Producto no encontrado.")
+            print("  Producto no encontrado.")
             return
 
         confirmacion = input(f"  ¿Seguro que deseas eliminar '{prod.nombre}'? (s/n): ").strip().lower()
         if confirmacion == "s":
             self.productos.remove(prod)
-            print("  ✓ Producto eliminado exitosamente.")
+            print("  Producto eliminado exitosamente.")
         else:
             print("  Eliminación cancelada.")
 
@@ -208,7 +208,7 @@ class SistemaInventario:
             total = sum(p.precio * p.cantidad for p in self.productos)
             archivo.write(f"Valor total del inventario: ${total:.2f}\n")
 
-        print("  ✓ Inventario guardado en 'inventario.txt'.")
+        print("  Inventario guardado en 'inventario.txt'.")
 
     # ─── MENÚ ─────────────────────────────────────────────────────────────────
 
@@ -250,7 +250,7 @@ class SistemaInventario:
                 print("  Saliendo del sistema...")
                 break
             else:
-                print("  ✗ Opción inválida, intente nuevamente.")
+                print("   Opción inválida, intente nuevamente.")
 
 
 sistema = SistemaInventario()
