@@ -97,7 +97,9 @@
                                 </td>
                                 <td class="text-end">
                                     <a href="{{ url_for('editar_producto', codigo=producto.codigo) }}" class="btn btn-sm btn-primary me-1">Editar</a>
-                                    <a href="#" class="btn btn-sm btn-danger delete-btn" data-url="{{ url_for('eliminar_producto', codigo=producto.codigo) }}">Eliminar</a>
+                                    <form action="{{ url_for('eliminar_producto', codigo=producto.codigo) }}" method="POST" class="d-inline delete-form">
+                        <button type="submit" class="btn btn-sm btn-danger delete-btn">Eliminar</button>
+                    </form>
                                 </td>
                             </tr>
                             {% else %}
@@ -165,31 +167,32 @@
             },
             buttonsStyling: false
         });
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
+        // Manejar eliminación mediante formulario POST con SweetAlert2
+        document.querySelectorAll('.delete-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                const url = this.dataset.url;
                 swalWithBootstrapButtons.fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
+                    title: "¿Estás seguro?",
+                    text: "¡Esta acción no se puede deshacer!",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, cancel!",
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar",
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
                         swalWithBootstrapButtons.fire({
-                            title: "Deleted!",
-                            text: "Your file has been deleted.",
+                            title: "Eliminado",
+                            text: "El producto ha sido eliminado.",
                             icon: "success"
                         }).then(() => {
-                            window.location.href = url;
+                            // Enviar el formulario POST
+                            form.submit();
                         });
                     } else if (result.dismiss === Swal.DismissReason.cancel) {
                         swalWithBootstrapButtons.fire({
-                            title: "Cancelled",
-                            text: "Your imaginary file is safe :)",
+                            title: "Cancelado",
+                            text: "El producto no se ha eliminado.",
                             icon: "error"
                         });
                     }

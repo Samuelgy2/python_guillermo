@@ -174,7 +174,7 @@ def editar_producto(codigo):
     producto = None
     try:
         if conexion and conexion.is_connected():
-            cursor = conexion.cursor(dictionary=True)
+            cursor = conexion.cursor(dictionary=True, buffered=True)
             cursor.execute("SELECT codigo, nombre, precio, categoria FROM productos WHERE codigo = %s", (codigo,))
             producto = cursor.fetchone()
     except Exception as e:
@@ -220,16 +220,21 @@ def actualizar_producto():
     return redirect(url_for('productos'))
 
 # ─── ELIMINAR PRODUCTO ──────────────────────────────────────────────────────
-@app.route("/eliminar_producto/<codigo>")
+@app.route("/eliminar_producto/<codigo>", methods=["POST"])
 @login_requerido
 def eliminar_producto(codigo):
     """Eliminar un producto de la base de datos"""
+    # Validar que se recibió un código válido
+    if not codigo:
+        flash("Código de producto no especificado", "error")
+        return redirect(url_for('productos'))
     conexion = get_conexion()
     cursor = None
     try:
         if conexion and conexion.is_connected():
             cursor = conexion.cursor()
-            sql = "DELETE FROM productos WHERE codigo = %s"
+            # Uso LIMIT 1 como medida extra de seguridad
+            sql = "DELETE FROM productos WHERE codigo = %s LIMIT 1"
             cursor.execute(sql, (codigo,))
             conexion.commit()
             flash("Producto eliminado correctamente", "success")
@@ -296,7 +301,7 @@ def login():
     cursor = None
     usuario = None
     try:
-        cursor = conexion.cursor(dictionary=True)
+        cursor = conexion.cursor(dictionary=True, buffered=True)
         cursor.execute("SELECT * FROM usuarios WHERE email = %s", (email,))
         usuario = cursor.fetchone()
     except Exception as e:
